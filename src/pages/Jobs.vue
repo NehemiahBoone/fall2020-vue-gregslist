@@ -57,11 +57,14 @@
         </form>
       </div>
     </div>
-    <div class="row" id="data"></div>
+    <div class="row" id="data">
+      <job v-for="job in jobs" :key="job._id" :jobData="job" />
+    </div>
   </div>
 </template>
 
 <script>
+import Job from "../components/Job.vue";
 export default {
   name: "Jobs",
   mounted() {
@@ -78,7 +81,14 @@ export default {
       this.$store.dispatch("createJob", this.newJob);
     },
   },
-  computed: {},
+  computed: {
+    jobs() {
+      return this.$store.state.jobs;
+    },
+  },
+  components: {
+    Job,
+  },
 };
 </script>
 

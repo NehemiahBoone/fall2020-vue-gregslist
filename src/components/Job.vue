@@ -1,17 +1,25 @@
 <template>
   <div class="col-4 job">
-    <div class="card">
-      <div class="card-body">
-        <h4 class="card-title">{{}}</h4>
+    <router-link :to="{name: 'JobDetails', params: {id: jobData._id}}">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">{{jobData.jobTitle}} - {{jobData.company}}</h4>
+          <p>{{jobData.description}}</p>
+        </div>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 
 <script>
 export default {
   name: "Job",
-  props: {},
+  props: {
+    jobData: {
+      type: Object,
+      required: true,
+    },
+  },
   data() {
     return {};
   },

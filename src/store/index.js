@@ -9,7 +9,8 @@ export default new Vuex.Store({
   state: {
     cars: [],
     jobs: [],
-    activeCar: {}
+    activeCar: {},
+    activeJob: {}
   },
   mutations: {
     setJobs(state, jobs) {
@@ -27,8 +28,14 @@ export default new Vuex.Store({
     setActiveCar(state, car) {
       state.activeCar = car
     },
+    setActiveJob(state, job) {
+      state.activeJob = job
+    },
     removeCar(state, id) {
       state.cars = state.cars.filter(c => c.id != id)
+    },
+    removeJob(state, id) {
+      state.jobs = state.jobs.filter(j => j.id != id)
     }
   },
   actions: {
@@ -57,6 +64,15 @@ export default new Vuex.Store({
         console.error(error)
       }
 
+    },
+    async getJobById({ commit }, id) {
+      try {
+        let res = await api.get("jobs/" + id)
+        console.log(res)
+        commit("setActiveJob", res.data.data)
+      } catch (error) {
+        console.error(error)
+      }
     },
     async createJob({ commit }, newJob) {
       try {
@@ -94,6 +110,16 @@ export default new Vuex.Store({
         commit("setActiveCar", {})
         // NOTE this will change the active route
         router.push({ name: "Cars" })
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async deleteJob({ commit }, id) {
+      try {
+        await api.delete('jobs/' + id)
+        commit("removeJob", id)
+        commit("setActiveJob", {})
+        router.push({ name: "Jobs" })
       } catch (error) {
         console.error(error)
       }
