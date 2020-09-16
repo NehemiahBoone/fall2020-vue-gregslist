@@ -8,11 +8,18 @@ Vue.use(Vuex)
 export default new Vuex.Store({
   state: {
     cars: [],
+    jobs: [],
     activeCar: {}
   },
   mutations: {
+    setJobs(state, jobs) {
+      state.jobs = jobs
+    },
     setCars(state, cars) {
       state.cars = cars
+    },
+    addJob(state, job) {
+      state.jobs.push(job)
     },
     addCar(state, car) {
       state.cars.push(car)
@@ -25,6 +32,14 @@ export default new Vuex.Store({
     }
   },
   actions: {
+    async getAllJobs({ commit }) {
+      try {
+        let res = await api.get('jobs')
+        commit("setJobs", res.data.data)
+      } catch (error) {
+        console.error(error)
+      }
+    },
     async getAllCars({ commit }) {
       try {
         let res = await api.get('cars')
@@ -42,6 +57,14 @@ export default new Vuex.Store({
         console.error(error)
       }
 
+    },
+    async createJob({ commit }, newJob) {
+      try {
+        let res = await api.post('jobs', newJob)
+        commit("addJob", res.data.data)
+      } catch (error) {
+        console.error(error)
+      }
     },
     async createCar({ commit }, newCar) {
       try {
